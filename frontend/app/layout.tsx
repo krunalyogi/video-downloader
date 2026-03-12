@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -44,10 +45,6 @@ export default function RootLayout({
       <head>
         <link rel="apple-touch-icon" href="/favicon.ico" />
         <meta name="theme-color" content="#7c3aed" />
-        {/* Analytics */}
-        <Script id="analytics-mock" strategy="afterInteractive">
-          {`console.log("Analytics Script Loaded optimized via Next.js next/script");`}
-        </Script>
         {/* PWA Service Worker */}
         <Script id="sw-register" strategy="afterInteractive">
           {`if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').then(r => console.log('SW registered', r.scope)).catch(e => console.log('SW error', e)); }`}
@@ -61,6 +58,7 @@ export default function RootLayout({
         </main>
 
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
