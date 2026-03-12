@@ -45,6 +45,7 @@ export default function RootLayout({
       <head>
         <link rel="apple-touch-icon" href="/favicon.ico" />
         <meta name="theme-color" content="#7c3aed" />
+        <meta name="google-site-verification" content="NSTBsW3PX_q-rN_cra4pBxw1D_uFG8FZx-PTh61MG-8" />
         {/* PWA Service Worker */}
         <Script id="sw-register" strategy="afterInteractive">
           {`if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').then(r => console.log('SW registered', r.scope)).catch(e => console.log('SW error', e)); }`}
