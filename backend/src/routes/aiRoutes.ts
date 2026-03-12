@@ -1,12 +1,17 @@
 import { Router, Request, Response } from 'express';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const router = Router();
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || 'mock_key',
-});
+// Initialize Gemini — free tier via Google AI Studio
+const getGemini = () => {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) return null;
+    const genAI = new GoogleGenerativeAI(apiKey);
+    return genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+};
 
+// ── POST /api/ai/captions ────────────────────────────────────────────────────
 router.post('/captions', async (req: Request, res: Response): Promise<void> => {
     try {
         const { topic, platform, tone } = req.body;
@@ -16,70 +21,66 @@ router.post('/captions', async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const prompt = `Write a highly engaging, viral-optimized social media caption about: "${topic}".
+        const prompt = `You are an expert social media copywriter who crafts viral content.
+
+Write a highly engaging social media caption about: "${topic}"
 Platform: ${platform}
 Tone: ${tone}
 
 Requirements:
-- Structure the caption with an aesthetic hook, middle value, and strong call to action.
-- Include 5-10 highly relevant hashtags at the very end.
+- Start with a scroll-stopping hook.
+- Add value or storytelling in the middle.
+- End with a strong call to action (question or directive).
 - Use emojis naturally but don't overdo it.
-- Format the response with line breaks for readability.`;
+- Finish with 8-10 highly relevant hashtags on a new line.
+- Format the caption with line breaks for readability.
 
-        // If no real API key, return a mock response for Demo purposes
-        if (process.env.OPENAI_API_KEY === 'mock_key' || !process.env.OPENAI_API_KEY) {
+Return ONLY the caption text. Do not add any preamble or explanation.`;
+
+        const model = getGemini();
+
+        // No API key — return a mock response so the UI still works
+        if (!model) {
             setTimeout(() => {
                 res.json({
                     success: true,
                     result: {
                         caption: `Feeling absolutely magical thinking about ${topic} ✨\n\nThere's something so special about hitting pause and soaking in the moment. Who else agrees?\n\nLet me know your thoughts down below! 👇`,
-                        hashtags: ['#CreatorLife', `#${platform}magic`, '#Vibes', '#Aesthetic', '#MockResponse']
+                        hashtags: ['#CreatorLife', `#${platform}`, '#Vibes', '#Aesthetic', '#FreeDemo']
                     }
                 });
-            }, 1000);
+            }, 800);
             return;
         }
 
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini", // Optimized for $0 hosting and ad-sense tier limits
-            messages: [
-                { role: "system", content: "You are an expert social media manager and copywriter who knows exactly how to drive engagement and virality." },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-        });
+        const result = await model.generateContent(prompt);
+        const rawText = result.response.text();
 
-        const rawText = completion.choices[0]?.message?.content || '';
-
-        // Simple heuristic to split text from hashtags at the bottom
-        const hashtagRegex = /(?:#\w+\s*)+$/;
+        // Split caption body from hashtags
+        const hashtagRegex = /(\n+)((?:#\w+\s*)+)$/;
         const match = rawText.match(hashtagRegex);
 
-        let caption = rawText;
+        let caption = rawText.trim();
         let hashtags: string[] = [];
 
-        if (match) {
+        if (match && match.index !== undefined) {
             caption = rawText.slice(0, match.index).trim();
-            hashtags = match[0].match(/#\w+/g) || [];
+            hashtags = match[2].match(/#\w+/g) || [];
         } else {
-            // Fallback if model didn't cluster them at the end
+            // Fallback: extract any hashtags from the full text
             hashtags = rawText.match(/#\w+/g) || [];
+            caption = rawText.replace(/#\w+/g, '').trim();
         }
 
-        res.json({
-            success: true,
-            result: {
-                caption,
-                hashtags,
-            }
-        });
+        res.json({ success: true, result: { caption, hashtags } });
 
     } catch (error: any) {
-        console.error('[OpenAI Error]:', error.message);
-        res.status(500).json({ success: false, error: 'Failed to generate content' });
+        console.error('[Gemini Error - captions]:', error.message);
+        res.status(500).json({ success: false, error: 'Failed to generate caption' });
     }
 });
 
+// ── POST /api/ai/hashtags ─────────────────────────────────────────────────────
 router.post('/hashtags', async (req: Request, res: Response): Promise<void> => {
     try {
         const { topic } = req.body;
@@ -89,48 +90,46 @@ router.post('/hashtags', async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const prompt = `Generate exactly 30 highly relevant, trending hashtags for the following topic: "${topic}".
-Instructions:
-- Return ONLY a JSON object with a single key "hashtags" containing an array of strings (e.g., { "hashtags": ["#hashtag1", "#hashtag2"] }).
-- Ensure they are optimized for reaching a wide audience on Instagram and TikTok.`;
+        const prompt = `Generate exactly 30 highly relevant, trending hashtags for the topic: "${topic}".
 
-        // Mock mode
-        if (process.env.OPENAI_API_KEY === 'mock_key' || !process.env.OPENAI_API_KEY) {
+Rules:
+- Return ONLY a raw JSON array of strings, nothing else.
+- Each hashtag must start with "#".
+- Mix popular (1M+ posts), mid-range (100K-1M), and niche (10K-100K) hashtags.
+- Optimize for Instagram and TikTok reach in 2025.
+
+Example format: ["#hashtag1", "#hashtag2", ...]`;
+
+        const model = getGemini();
+
+        // Mock fallback
+        if (!model) {
             setTimeout(() => {
                 res.json({
                     success: true,
-                    result: ['#CreatorLife', '#Viral', '#Trending', '#ContentCreator', '#ExplorePage']
+                    result: ['#CreatorLife', '#Viral', '#Trending', '#ContentCreator', '#ExplorePage', '#FYP', '#Reels', '#TikTok', '#Instagram', '#GrowthHacking']
                 });
-            }, 1000);
+            }, 800);
             return;
         }
 
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                { role: "system", content: "You are an SEO algorithm expert." },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-            response_format: { type: "json_object" }
-        });
+        const result = await model.generateContent(prompt);
+        const rawText = result.response.text().trim();
 
-        const rawText = completion.choices[0]?.message?.content || '{}';
         let hashtags: string[] = [];
         try {
-           const parsed = JSON.parse(rawText);
-           hashtags = parsed.hashtags || Object.values(parsed)[0] || [];
+            // Remove markdown code fences if Gemini wraps in ```json ... ```
+            const cleaned = rawText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+            hashtags = JSON.parse(cleaned);
         } catch {
-           hashtags = rawText.match(/#\w+/g) || [];
+            // Fallback: extract hashtags from plain text
+            hashtags = rawText.match(/#\w+/g) || [];
         }
 
-        res.json({
-            success: true,
-            result: hashtags
-        });
+        res.json({ success: true, result: hashtags });
 
     } catch (error: any) {
-        console.error('[OpenAI Error]:', error.message);
+        console.error('[Gemini Error - hashtags]:', error.message);
         res.status(500).json({ success: false, error: 'Failed to generate hashtags' });
     }
 });
