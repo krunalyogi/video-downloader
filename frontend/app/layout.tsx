@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Klipto | Free Video Downloader & Creator Tools",
   description: "Download videos from Instagram, TikTok, YouTube, Facebook, Pinterest, Reddit and 20+ platforms. Free, no watermark, no login required.",
   manifest: '/manifest.json',
-  metadataBase: new URL('https://klipto.com'),
+  metadataBase: new URL('https://klipto.vercel.app'),
   openGraph: {
     title: 'Klipto | Free Video Downloader & Creator Tools',
     description: 'Download from 20+ platforms — Instagram, TikTok, YouTube, Facebook, Reddit & more.',

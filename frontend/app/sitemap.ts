@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { toolsConfig } from "@/config/tools";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://klipto.com";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://klipto.vercel.app";
 
     const toolUrls = toolsConfig.map(tool => ({
         url: `${baseUrl}/tools/${tool.slug}`,
