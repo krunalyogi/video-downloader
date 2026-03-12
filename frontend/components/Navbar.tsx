@@ -1,10 +1,11 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Menu, Zap, X } from 'lucide-react';
+import { Search, Menu, X } from 'lucide-react';
 import { toolsConfig } from '@/config/tools';
 
 export const Navbar = () => {
@@ -47,7 +48,7 @@ export const Navbar = () => {
                     {/* Logo */}
                     <div className="flex items-center gap-2">
                         <Link href="/" className="flex items-center gap-2">
-                            <Zap className="h-6 w-6 text-purple-600" />
+                            <Image src="/icon.png" alt="Klipto" width={28} height={28} className="rounded-md" priority />
                             <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">
                                 Klipto
                             </span>
