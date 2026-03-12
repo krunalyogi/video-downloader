@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/icon.png" />
         <meta name="theme-color" content="#7c3aed" />
         <meta name="google-site-verification" content="NSTBsW3PX_q-rN_cra4pBxw1D_uFG8FZx-PTh61MG-8" />
         {/* PWA Service Worker */}
