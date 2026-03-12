@@ -402,6 +402,10 @@ export const getToolBySlug = (slug: string): ToolConfig | undefined => {
     return toolsConfig.find(t => t.slug === slug);
 };
 
+// Only returns primary tools (no SEO aliases) — aliases still exist for URL routing
 export const getToolsByCategory = (category: ToolCategory): ToolConfig[] => {
-    return toolsConfig.filter(t => t.category === category);
+    return toolsConfig.filter(t => t.category === category && !t.isAlias);
 };
+
+// All tools including aliases (for sitemap, search, etc.)
+export const getAllTools = (): ToolConfig[] => toolsConfig;
