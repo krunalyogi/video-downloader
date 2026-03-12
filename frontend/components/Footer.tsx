@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Zap, Github, Twitter, Instagram } from 'lucide-react';
+import Image from 'next/image';
+import { Github, Twitter, Instagram } from 'lucide-react';
 
 export const Footer = () => {
     return (
@@ -8,7 +9,7 @@ export const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                     <div className="col-span-1 md:col-span-1">
                         <Link href="/" className="flex items-center gap-2 mb-4">
-                            <Zap className="h-6 w-6 text-purple-600" />
+                            <Image src="/icon.png" alt="Klipto" width={28} height={28} className="rounded-md" />
                             <span className="font-bold text-xl tracking-tight">Klipto</span>
                         </Link>
                         <p className="text-gray-500 dark:text-zinc-400 text-sm mb-4">
