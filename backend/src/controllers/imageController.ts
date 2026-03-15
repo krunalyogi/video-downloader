@@ -16,6 +16,7 @@ export const compressImage = async (req: Request, res: Response): Promise<void> 
         if (redisClient.status === 'ready') {
             try {
                 const { imageQueue } = await import('../jobs/imageQueue');
+                if (!imageQueue) throw new Error('Image queue not initialized');
                 const job = await imageQueue.add('compress', {
                     fileBufferObject: req.file.buffer,
                     originalname: req.file.originalname,

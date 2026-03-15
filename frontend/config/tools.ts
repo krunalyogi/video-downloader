@@ -9,6 +9,7 @@ export interface ToolConfig {
     apiEndpoint?: string;
     isAlias?: boolean;
     parentSlug?: string;
+    faqs?: { q: string; a: string }[];
 }
 
 export const toolsConfig: ToolConfig[] = [
@@ -20,7 +21,13 @@ export const toolsConfig: ToolConfig[] = [
         category: "download",
         description: "Download Instagram Reels and videos instantly in high quality, no watermark.",
         icon: "Instagram",
-        apiEndpoint: "/api/download"
+        apiEndpoint: "/api/download",
+        faqs: [
+            { q: "How to download Instagram Reels without a watermark?", a: "Simply copy the Instagram Reel link from your app, paste it into the Klipto downloader above, and click Download. Your video will be saved in full HD without any watermarks." },
+            { q: "Is it safe to download Instagram videos?", a: "Yes, downloading public Instagram videos using Klipto is 100% safe. We do not require you to log in or provide any personal information." },
+            { q: "Where are the downloaded Instagram Reels saved?", a: "Downloaded videos are typically saved to your device's default 'Downloads' folder or your camera roll if you are using a mobile device." },
+            { q: "Can I download private Instagram Reels?", a: "No, Klipto currently only supports downloading Reels and videos from public Instagram accounts to respect user privacy." }
+        ]
     },
     {
         name: "Instagram Story Downloader",
@@ -36,7 +43,13 @@ export const toolsConfig: ToolConfig[] = [
         category: "download",
         description: "Download TikTok videos without the watermark in full HD.",
         icon: "Video",
-        apiEndpoint: "/api/download"
+        apiEndpoint: "/api/download",
+        faqs: [
+            { q: "How do I remove the TikTok watermark?", a: "Klipto's TikTok downloader automatically removes the username and logo watermark from the video during the download process. Just paste the link and download." },
+            { q: "Do I need to install an app to download TikToks?", a: "No, Klipto is completely web-based. You can download TikTok videos directly from your browser on iPhone, Android, or PC without installing any software." },
+            { q: "Can I download TikTok sounds or audio only?", a: "Yes! While this tool downloads the video, you can use our TikTok Audio Downloader tool or YouTube to MP3 tool if you only need the audio track." },
+            { q: "Is there a limit to how many TikToks I can download?", a: "No, there are no limits. You can download as many TikTok videos as you want, completely free of charge." }
+        ]
     },
     {
         name: "YouTube Video Downloader",
@@ -44,7 +57,13 @@ export const toolsConfig: ToolConfig[] = [
         category: "download",
         description: "Download YouTube videos in up to 4K resolution.",
         icon: "Youtube",
-        apiEndpoint: "/api/download"
+        apiEndpoint: "/api/download",
+        faqs: [
+            { q: "What is the maximum resolution supported for YouTube downloads?", a: "Klipto supports downloading YouTube videos in the highest available quality, up to 4K resolution (2160p) when available from the source video." },
+            { q: "Is downloading YouTube videos legal?", a: "Downloading YouTube videos for personal, offline viewing is generally acceptable. However, you should not distribute, sell, or use copyrighted material without permission from the creator." },
+            { q: "Can I download long YouTube videos?", a: "Yes, you can download long YouTube videos, documentaries, or podcasts, but longer videos may take more time to process and download depending on the file size." },
+            { q: "Does the downloaded YouTube video include audio?", a: "Yes, all MP4 downloads from YouTube include both the high-quality video track and original audio track combined." }
+        ]
     },
     {
         name: "YouTube Shorts Downloader",

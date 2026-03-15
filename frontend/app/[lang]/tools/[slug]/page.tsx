@@ -9,16 +9,30 @@ import { BackgroundRemoverUI } from "@/components/BackgroundRemoverUI";
 import { ToolCard } from "@/components/ToolCard";
 import { AdBanner } from "@/components/AdBanner";
 import { getIcon } from "@/components/IconMapper";
+import { DynamicToolContent } from "@/components/DynamicToolContent";
 import { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const tool = getToolBySlug(params.slug);
     if (!tool) return { title: 'Not Found' };
 
+    const url = `https://klipto.vercel.app/tools/${tool.slug}`;
+
     return {
         title: `${tool.name} | Klipto`,
         description: tool.description,
+        alternates: {
+            canonical: url,
+        },
         openGraph: {
+            title: `${tool.name} | Klipto`,
+            description: tool.description,
+            url,
+            type: 'website',
+            siteName: 'Klipto',
+        },
+        twitter: {
+            card: 'summary_large_image',
             title: `${tool.name} | Klipto`,
             description: tool.description,
         }
@@ -38,13 +52,15 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
 
     const IconComponent = getIcon(tool.icon);
 
-    const faqItems = [
+    const defaultFaqs = [
         { q: `Is ${tool.name} free to use?`, a: `Yes, ${tool.name} on Klipto is 100% free. No sign-up, no subscription, and no hidden fees.` },
         { q: `Do downloaded files have watermarks?`, a: `No. Klipto removes all platform watermarks. Your downloaded file is clean and ready to use.` },
         { q: `Is it safe to use ${tool.name}?`, a: `Yes. Klipto never stores your files or personal data. All processing happens securely and files are discarded immediately after download.` },
         { q: `What file format will I get?`, a: `Videos are downloaded in MP4 format. Audio tools provide MP3 files. Images are provided in their original format.` },
         { q: `Does it work on mobile devices?`, a: `Yes — Klipto is fully optimized for iPhone, Android, and all modern browsers.` },
     ];
+
+    const faqItems = tool.faqs && tool.faqs.length > 0 ? tool.faqs : defaultFaqs;
 
     const structuredData = {
         "@context": "https://schema.org",
@@ -66,6 +82,14 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                     "name": f.q,
                     "acceptedAnswer": { "@type": "Answer", "text": f.a }
                 }))
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Klipto", "item": "https://klipto.vercel.app" },
+                    { "@type": "ListItem", "position": 2, "name": tool.category.charAt(0).toUpperCase() + tool.category.slice(1) + " Tools", "item": `https://klipto.vercel.app/category/${tool.category}` },
+                    { "@type": "ListItem", "position": 3, "name": tool.name, "item": `https://klipto.vercel.app/tools/${tool.slug}` }
+                ]
             }
         ]
     };
@@ -144,6 +168,10 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                             <p className="text-gray-500 dark:text-zinc-400">Tool interface placeholder for {tool.category}</p>
                         </div>
                     )}
+
+                    {/* Highly dynamic SEO-injected content */}
+                    <DynamicToolContent tool={tool} renderSlug={renderSlug} />
+
                 </div>
             </section>
 
@@ -177,18 +205,12 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
             <section className="w-full max-w-4xl mx-auto px-4 pb-16">
                 <h2 className="text-2xl font-bold mb-8 text-gray-900 dark:text-white">Frequently Asked Questions</h2>
                 <div className="space-y-4">
-                    <div className="p-6 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl">
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-2">Is the {tool.name} completely free to use?</h3>
-                        <p className="text-gray-600 dark:text-zinc-400">Yes, the {tool.name} is 100% free. We are an ad-supported platform, meaning you will never be asked for a credit card, login, or subscription to use our premium AI and utility features.</p>
-                    </div>
-                    <div className="p-6 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl">
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-2">Is my data safe when using {tool.name}?</h3>
-                        <p className="text-gray-600 dark:text-zinc-400">Absolutely. Any files you process through our tools are handled securely in temporary server memory. We do not store, view, or claim ownership of your data. All files are automatically destroyed immediately after processing.</p>
-                    </div>
-                    <div className="p-6 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl">
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-2">Can I use {tool.name} on my mobile phone?</h3>
-                        <p className="text-gray-600 dark:text-zinc-400">Yes! Klipto is fully optimized for iOS and Android. You can use the {tool.name} directly from your mobile browser without installing any third-party apps.</p>
-                    </div>
+                    {faqItems.map((faq, i) => (
+                        <div key={i} className="p-6 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl">
+                            <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-2">{faq.q}</h3>
+                            <p className="text-gray-600 dark:text-zinc-400">{faq.a}</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 

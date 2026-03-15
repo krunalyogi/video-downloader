@@ -149,6 +149,27 @@ export const VideoToGifUI = () => {
                 )}
             </AnimatePresence>
 
+            {/* SEO Text Content */}
+            <div className="w-full max-w-4xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-3xl p-8 shadow-sm text-left mt-8">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Convert Video to GIF Online Free</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                    Klipto provides the fastest and most secure way to convert your MP4, MOV, or WEBM videos into stunning, looping animated GIFs. Whether you are creating memes, reaction GIFs, or short animations for social media, our free online video to GIF maker handles it all entirely in your browser.
+                </p>
+                
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Key Features of our GIF Converter</h3>
+                <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-6">
+                    <li><strong>No Watermark:</strong> Your generated GIFs are completely clean and branding-free.</li>
+                    <li><strong>Lightning Fast:</strong> Conversion happens in seconds using optimized edge infrastructure.</li>
+                    <li><strong>High Quality:</strong> Maintained frame rates and optimized color palettes for the best balance of quality and file size.</li>
+                    <li><strong>Secure & Private:</strong> Files are processed securely and discarded immediately. No data is stored.</li>
+                </ul>
+
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Why create animated GIFs?</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    GIFs are the language of the internet. They auto-play everywhere, from Twitter and Reddit to iMessage and Discord. By converting your short video clips into GIFs, you guarantee that your content will be seen instantly without the user needing to press &quot;Play&quot; or unmute their device. Perfect for email newsletters, blog posts, and forum signatures!
+                </p>
+            </div>
+
             <AdSlot slotId="video_to_gif_bottom" />
         </div>
     );
