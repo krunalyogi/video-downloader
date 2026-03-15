@@ -9,6 +9,33 @@ export const metadata: Metadata = {
 
 const POSTS = [
     {
+        slug: 'download-trending-instagram-audio',
+        title: 'How to Download Trending Instagram Audio as MP3 in 2025',
+        excerpt: 'Found a viral sound on Instagram Reels that you want to use? Learn how to extract and save Instagram audio directly to your phone as an MP3 instantly.',
+        category: 'Tutorials',
+        readTime: '3 min read',
+        date: 'March 15, 2025',
+        color: 'from-orange-400 to-rose-500',
+    },
+    {
+        slug: 'video-to-gif-converter-guide',
+        title: 'The Ultimate Guide to Converting Video to High-Quality GIF',
+        excerpt: 'GIFs are the language of the internet. Discover how to clip your favorite YouTube, TikTok, or personal videos into shareable, high-quality GIFs in seconds.',
+        category: 'Guides',
+        readTime: '4 min read',
+        date: 'March 14, 2025',
+        color: 'from-indigo-400 to-cyan-500',
+    },
+    {
+        slug: 'best-ai-youtube-title-generator',
+        title: 'How to Write Viral YouTube Titles Using AI (A 2025 Guide)',
+        excerpt: 'Your YouTube video will fail if the title doesn\'t drive clicks. Learn how top creators use AI generators to write compelling, click-worthy titles without the clickbait.',
+        category: 'AI Tools',
+        readTime: '6 min read',
+        date: 'March 12, 2025',
+        color: 'from-teal-400 to-emerald-500',
+    },
+    {
         slug: 'how-to-download-instagram-reels-without-watermark',
         title: 'How to Download Instagram Reels Without a Watermark in 2025',
         excerpt: 'Learn the fastest and most reliable method to save Instagram Reels to your phone or computer — completely free, no app needed.',
