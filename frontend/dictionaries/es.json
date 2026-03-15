@@ -1,0 +1,24 @@
+{
+  "navigation": {
+    "tools": "Herramientas",
+    "categories": "Categorías",
+    "blog": "Blog"
+  },
+  "footer": {
+    "description": "El paquete definitivo de herramientas para creadores de contenido. Descarga, edita y optimiza tu contenido para cualquier plataforma.",
+    "topTools": "Mejores Herramientas",
+    "company": "Compañía",
+    "aboutUs": "Sobre nosotros",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "contact": "Contáctanos",
+    "support": "Apoyar a Kliptify",
+    "builtFor": "Creado para creadores de todo el mundo."
+  },
+  "tools": {
+    "downloadDescription": "Descarga video y audio de alta calidad.",
+    "imageDescription": "Edita, comprime y elimina fondos.",
+    "aiDescription": "Genera subtítulos, ideas y más.",
+    "creatorDescription": "Hashtags y herramientas de creación de contenido."
+  }
+}

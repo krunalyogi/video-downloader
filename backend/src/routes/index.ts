@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { universalDownloader, proxyStream } from '../controllers/downloadController';
+import { subscribe } from '../controllers/subscribeController';
 
 const router = Router();
 
@@ -11,5 +12,8 @@ router.get('/status', (req, res) => {
 // Downloader Routes
 router.post('/download', universalDownloader);
 router.get('/proxy-stream', proxyStream);
+
+// Email/Lead Capture
+router.post('/subscribe', subscribe);
 
 export default router;

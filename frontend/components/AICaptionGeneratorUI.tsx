@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, Loader2, Copy, Check, Hash } from "lucide-react";
 import { motion } from "framer-motion";
 import { AdSlot } from "@/components/AdSlot";
+import { LeadCaptureModal } from "@/components/LeadCaptureModal";
 
 export const AICaptionGeneratorUI = () => {
     const [topic, setTopic] = useState("");
@@ -13,9 +14,36 @@ export const AICaptionGeneratorUI = () => {
     const [isGenerating, setIsGenerating] = useState(false);
     const [result, setResult] = useState<{ caption: string, hashtags: string[] } | null>(null);
     const [copied, setCopied] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [hasSubscribed, setHasSubscribed] = useState(false);
 
-    const handleGenerate = async () => {
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setHasSubscribed(!!localStorage.getItem("kliptify_subscribed"));
+        }
+    }, []);
+
+    const handleGenerate = () => {
         if (!topic) return;
+        
+        if (!hasSubscribed) {
+            setIsModalOpen(true);
+            return;
+        }
+
+        executeGeneration();
+    };
+
+    const handleModalSuccess = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("kliptify_subscribed", "true");
+        }
+        setHasSubscribed(true);
+        setIsModalOpen(false);
+        executeGeneration();
+    };
+
+    const executeGeneration = async () => {
         setIsGenerating(true);
         setResult(null);
 
@@ -142,6 +170,15 @@ export const AICaptionGeneratorUI = () => {
                     </div>
                 </motion.div>
             )}
+
+            <LeadCaptureModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={handleModalSuccess}
+                sourceTool="ai-caption-generator"
+                title="Unlock AI Generation"
+                description="Enter your email to unlock unlimited AI caption generations and get our weekly growth tips!"
+            />
 
             <AdSlot slotId="ai_caption_bottom" />
         </div>

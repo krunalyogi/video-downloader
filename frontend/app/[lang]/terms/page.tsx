@@ -2,32 +2,52 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Terms of Service | Kliptify',
-    description: 'Terms of Service and usage agreements for Kliptify',
+    description: 'Read the Terms of Service for using Kliptify.',
 };
 
 export default function TermsPage() {
     return (
-        <div className="w-full max-w-4xl mx-auto px-4 py-16">
-            <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-8">Terms of Service</h1>
-            <div className="prose prose-purple dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
-                <p>Last updated: October 2026</p>
-                <p>Please read these Terms of Service (&quot;Terms&quot;, &quot;Terms of Service&quot;) carefully before using the Kliptify platform.</p>
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-16 px-4">
+            <div className="max-w-4xl mx-auto bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-zinc-800">
+                <h1 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white mb-8">Terms of Service</h1>
+                
+                <div className="space-y-8 text-gray-600 dark:text-gray-400 leading-relaxed">
+                    <section>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">1. Acceptance of Terms</h2>
+                        <p>By accessing and using Kliptify, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services. We reserve the right to modify these terms at any time.</p>
+                    </section>
 
-                <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-800 dark:text-gray-100">1. Acceptance of Terms</h2>
-                <p>By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</p>
+                    <section>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">2. Description of Service</h2>
+                        <p>Kliptify provides a suite of online tools for downloading, converting, and editing media files from universally accessible public platforms. The service is provided &quot;as is&quot; and &quot;as available&quot; without any warranties.</p>
+                    </section>
 
-                <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-800 dark:text-gray-100">2. Prohibited Uses</h2>
-                <p>You may use Service only for lawful purposes and in accordance with Terms. You agree not to use Service:</p>
-                <ul className="list-disc pl-6 mb-4 space-y-2">
-                    <li>In any way that violates any applicable national or international law or regulation.</li>
-                    <li>For the purpose of exploiting, harming, or attempting to exploit or harm minors in any way.</li>
-                    <li>To transmit, or procure the sending of, any advertising or promotional material, including any &quot;junk mail&quot;, &quot;chain letter,&quot; &quot;spam,&quot; or any other similar solicitation.</li>
-                    <li>To impersonate or attempt to impersonate Kliptify.</li>
-                    <li>To infringe upon the intellectual property of third parties. You must own the rights to the videos, images, and tools you manipulate through our processor.</li>
-                </ul>
+                    <section>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">3. User Conduct and Restrictions</h2>
+                        <p>When using Kliptify, you agree not to:</p>
+                        <ul className="list-disc list-inside mt-2 space-y-2 ml-4">
+                            <li>Download copyrighted material without explicit permission from the copyright owner.</li>
+                            <li>Use our services for any illegal or unauthorized purpose.</li>
+                            <li>Attempt to bypass or exploit our rate limits, APIs, or infrastructure.</li>
+                            <li>Redistribute or sell downloaded content.</li>
+                        </ul>
+                    </section>
 
-                <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-800 dark:text-gray-100">3. Limitation of Liability</h2>
-                <p>In no event shall Kliptify, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from (i) your access to or use of or inability to access or use the Service.</p>
+                    <section>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">4. Intellectual Property Rights</h2>
+                        <p>Kliptify respects the intellectual property rights of others. Our tools are designed for personal, fair use and offline viewing of content you have the right to access. Users are solely responsible for ensuring they possess the necessary rights or permissions to download and use the media.</p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">5. Limitation of Liability</h2>
+                        <p>Under no circumstances shall Kliptify, its developers, or its affiliates be liable for any direct, indirect, incidental, special, or consequential damages arising from the use or inability to use our services.</p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">6. Contact Information</h2>
+                        <p>If you have any questions or concerns regarding these terms, please use our contact page to reach out to our administration team.</p>
+                    </section>
+                </div>
             </div>
         </div>
     );

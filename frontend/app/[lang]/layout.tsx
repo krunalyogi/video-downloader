@@ -5,6 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import { getDictionary } from "@/dictionaries";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,13 +36,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { lang: string };
 }>) {
+  const dict = await getDictionary(params.lang);
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={params.lang} suppressHydrationWarning>
       <head>
         <link rel="apple-touch-icon" href="/icon.png" />
         <meta name="theme-color" content="#7c3aed" />
@@ -52,13 +57,13 @@ export default function RootLayout({
         </Script>
       </head>
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-purple-300 selection:text-purple-900 bg-[#FAFAFA] dark:bg-[#0A0A0A] text-gray-900 dark:text-gray-100 min-h-screen flex flex-col`}>
-        <Navbar />
+        <Navbar dict={dict} />
 
         <main className="flex-grow pb-16">
           {children}
         </main>
 
-        <Footer />
+        <Footer dict={dict} />
         <Analytics />
       </body>
     </html>

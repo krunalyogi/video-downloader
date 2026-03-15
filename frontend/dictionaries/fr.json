@@ -1,0 +1,24 @@
+{
+  "navigation": {
+    "tools": "Outils",
+    "categories": "Catégories",
+    "blog": "Blog"
+  },
+  "footer": {
+    "description": "La suite ultime d'outils pour les créateurs de contenu. Téléchargez, éditez et optimisez votre contenu pour n'importe quelle plateforme.",
+    "topTools": "Meilleurs Outils",
+    "company": "Entreprise",
+    "aboutUs": "À propos",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "contact": "Nous contacter",
+    "support": "Soutenir Kliptify",
+    "builtFor": "Conçu pour les créateurs du monde entier."
+  },
+  "tools": {
+    "downloadDescription": "Téléchargez des vidéos et de l'audio de haute qualité.",
+    "imageDescription": "Éditez, compressez et supprimez les arrière-plans.",
+    "aiDescription": "Générez des légendes, des idées et plus.",
+    "creatorDescription": "Hashtags et création de contenu."
+  }
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from 'next/link';
@@ -8,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X } from 'lucide-react';
 import { toolsConfig } from '@/config/tools';
 
-export const Navbar = () => {
+export const Navbar = ({ dict }: { dict?: any }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [showResults, setShowResults] = useState(false);
@@ -57,13 +58,13 @@ export const Navbar = () => {
 
                     {/* Desktop Nav */}
                     <div className="hidden md:flex items-center gap-6">
-                        <Link href="/category/download" className="text-sm font-medium hover:text-purple-600 transition-colors">Downloaders</Link>
+                        <Link href="/category/download" className="text-sm font-medium hover:text-purple-600 transition-colors">{dict?.navigation?.tools || 'Downloaders'}</Link>
                         <Link href="/category/image" className="text-sm font-medium hover:text-purple-600 transition-colors">Image</Link>
                         <Link href="/category/video" className="text-sm font-medium hover:text-purple-600 transition-colors">Video</Link>
                         <Link href="/category/creator" className="text-sm font-medium hover:text-purple-600 transition-colors">Creator</Link>
                         <Link href="/category/ai" className="text-sm font-medium hover:text-purple-600 transition-colors">AI Tools</Link>
                         <Link href="/tools/batch-downloader" className="text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors bg-purple-50 dark:bg-purple-900/30 px-3 py-1.5 rounded-full">Batch ⚡</Link>
-                        <Link href="/blog" className="text-sm font-medium hover:text-purple-600 transition-colors">Blog</Link>
+                        <Link href="/blog" className="text-sm font-medium hover:text-purple-600 transition-colors">{dict?.navigation?.blog || 'Blog'}</Link>
 
                         {/* Live Search */}
                         <div className="relative" ref={searchRef}>
