@@ -19,7 +19,7 @@ export const toolsConfig: ToolConfig[] = [
         name: "Instagram Reel Downloader",
         slug: "instagram-reel-downloader",
         category: "download",
-        description: "Download Instagram Reels and videos instantly in high quality, no watermark.",
+        description: "Download Instagram Reels, IGTV videos, and IG photos instantly in high quality 1080p. Our free Instagram Saver removes watermarks automatically. No app installation or login required.",
         icon: "Instagram",
         apiEndpoint: "/api/download",
         faqs: [
@@ -41,7 +41,7 @@ export const toolsConfig: ToolConfig[] = [
         name: "TikTok Downloader (No Watermark)",
         slug: "tiktok-downloader",
         category: "download",
-        description: "Download TikTok videos without the watermark in full HD.",
+        description: "Download TikTok videos without the watermark in completely uncompressed full HD. Our free TikTok to MP4 converter extracts the original high-resolution video file securely and anonymously directly to your iPhone, Android, or PC.",
         icon: "Video",
         apiEndpoint: "/api/download",
         faqs: [
@@ -55,7 +55,7 @@ export const toolsConfig: ToolConfig[] = [
         name: "YouTube Video Downloader",
         slug: "youtube-video-downloader",
         category: "download",
-        description: "Download YouTube videos in up to 4K resolution.",
+        description: "Fastest free online YouTube Video Downloader. Convert and save YouTube videos to MP4 format up to ultra-crisp 4K resolution. Preserve the original audio track with zero quality loss.",
         icon: "Youtube",
         apiEndpoint: "/api/download",
         faqs: [
