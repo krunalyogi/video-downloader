@@ -3,8 +3,8 @@ import { Mail } from 'lucide-react';
 import { ContactForm } from '@/components/ContactForm';
 
 export const metadata: Metadata = {
-    title: 'Contact Us | Klipto',
-    description: 'Get in touch with the Klipto support team',
+    title: 'Contact Us | Kliptify',
+    description: 'Get in touch with the Kliptify support team',
 };
 
 export default function ContactPage() {
@@ -12,7 +12,7 @@ export default function ContactPage() {
         <div className="w-full max-w-4xl mx-auto px-4 py-16">
             <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4 text-center">Contact Us</h1>
             <p className="text-center text-gray-600 dark:text-gray-400 mb-12">
-                Have questions or need support with Klipto? We&apos;re here to help.
+                Have questions or need support with Kliptify? We&apos;re here to help.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

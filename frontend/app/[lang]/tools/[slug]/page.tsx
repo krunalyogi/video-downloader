@@ -16,24 +16,24 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const tool = getToolBySlug(params.slug);
     if (!tool) return { title: 'Not Found' };
 
-    const url = `https://klipto.vercel.app/tools/${tool.slug}`;
+    const url = `https://kliptify.com/tools/${tool.slug}`;
 
     return {
-        title: `${tool.name} | Klipto`,
+        title: `${tool.name} | Kliptify`,
         description: tool.description,
         alternates: {
             canonical: url,
         },
         openGraph: {
-            title: `${tool.name} | Klipto`,
+            title: `${tool.name} | Kliptify`,
             description: tool.description,
             url,
             type: 'website',
-            siteName: 'Klipto',
+            siteName: 'Kliptify',
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${tool.name} | Klipto`,
+            title: `${tool.name} | Kliptify`,
             description: tool.description,
         }
     };
@@ -53,11 +53,11 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
     const IconComponent = getIcon(tool.icon);
 
     const defaultFaqs = [
-        { q: `Is ${tool.name} free to use?`, a: `Yes, ${tool.name} on Klipto is 100% free. No sign-up, no subscription, and no hidden fees.` },
-        { q: `Do downloaded files have watermarks?`, a: `No. Klipto removes all platform watermarks. Your downloaded file is clean and ready to use.` },
-        { q: `Is it safe to use ${tool.name}?`, a: `Yes. Klipto never stores your files or personal data. All processing happens securely and files are discarded immediately after download.` },
+        { q: `Is ${tool.name} free to use?`, a: `Yes, ${tool.name} on Kliptify is 100% free. No sign-up, no subscription, and no hidden fees.` },
+        { q: `Do downloaded files have watermarks?`, a: `No. Kliptify removes all platform watermarks. Your downloaded file is clean and ready to use.` },
+        { q: `Is it safe to use ${tool.name}?`, a: `Yes. Kliptify never stores your files or personal data. All processing happens securely and files are discarded immediately after download.` },
         { q: `What file format will I get?`, a: `Videos are downloaded in MP4 format. Audio tools provide MP3 files. Images are provided in their original format.` },
-        { q: `Does it work on mobile devices?`, a: `Yes — Klipto is fully optimized for iPhone, Android, and all modern browsers.` },
+        { q: `Does it work on mobile devices?`, a: `Yes — Kliptify is fully optimized for iPhone, Android, and all modern browsers.` },
     ];
 
     const faqItems = tool.faqs && tool.faqs.length > 0 ? tool.faqs : defaultFaqs;
@@ -70,7 +70,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                 "@type": "WebApplication",
                 "name": tool.name,
                 "description": tool.description,
-                "url": `https://klipto.com/tools/${tool.slug}`,
+                "url": `https://kliptify.com/tools/${tool.slug}`,
                 "applicationCategory": "UtilitiesApplication",
                 "operatingSystem": "All",
                 "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -86,9 +86,9 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
             {
                 "@type": "BreadcrumbList",
                 "itemListElement": [
-                    { "@type": "ListItem", "position": 1, "name": "Klipto", "item": "https://klipto.vercel.app" },
-                    { "@type": "ListItem", "position": 2, "name": tool.category.charAt(0).toUpperCase() + tool.category.slice(1) + " Tools", "item": `https://klipto.vercel.app/category/${tool.category}` },
-                    { "@type": "ListItem", "position": 3, "name": tool.name, "item": `https://klipto.vercel.app/tools/${tool.slug}` }
+                    { "@type": "ListItem", "position": 1, "name": "Kliptify", "item": "https://kliptify.com" },
+                    { "@type": "ListItem", "position": 2, "name": tool.category.charAt(0).toUpperCase() + tool.category.slice(1) + " Tools", "item": `https://kliptify.com/category/${tool.category}` },
+                    { "@type": "ListItem", "position": 3, "name": tool.name, "item": `https://kliptify.com/tools/${tool.slug}` }
                 ]
             }
         ]

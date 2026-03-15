@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { Zap, Download, Sparkles, Shield, Globe, Users, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'About Klipto | Free Creator Tools for Everyone',
-    description: 'Learn about Klipto — our mission to give every content creator access to powerful, professional-grade tools for free.',
+    title: 'About Kliptify | Free Creator Tools for Everyone',
+    description: 'Learn about Kliptify — our mission to give every content creator access to powerful, professional-grade tools for free.',
     openGraph: {
-        title: 'About Klipto | Free Creator Tools for Everyone',
+        title: 'About Kliptify | Free Creator Tools for Everyone',
         description: 'We believe premium creator tools should be free for everyone.',
     }
 };
@@ -20,7 +20,7 @@ const stats = [
 
 const values = [
     { icon: Shield, title: 'Privacy First', description: 'We never store your files or personal data. Everything is processed in memory and discarded instantly after use.' },
-    { icon: Zap, title: 'Always Free', description: 'Every tool on Klipto is 100% free. No subscriptions, no credits, no watermarks on our end. We are supported by ads, not by you.' },
+    { icon: Zap, title: 'Always Free', description: 'Every tool on Kliptify is 100% free. No subscriptions, no credits, no watermarks on our end. We are supported by ads, not by you.' },
     { icon: Sparkles, title: 'AI-Powered', description: 'We integrate cutting-edge AI to provide intelligent tools like caption generation and hashtag optimization that grow with you.' },
     { icon: Globe, title: 'Multi-Platform', description: 'From Instagram to Reddit, TikTok to Vimeo — we support 20+ social platforms so you always have one place to go.' },
 ];
@@ -40,7 +40,7 @@ export default function AboutPage() {
                         Built for Creators, By Creators
                     </h1>
                     <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                        Klipto was born from a simple frustration: why do basic creator tools cost money, demand sign-ups, or bury downloads behind paywalls? We decided to fix that.
+                        Kliptify was born from a simple frustration: why do basic creator tools cost money, demand sign-ups, or bury downloads behind paywalls? We decided to fix that.
                     </p>
                 </div>
             </section>
@@ -89,7 +89,7 @@ export default function AboutPage() {
             {/* CTA */}
             <section className="w-full bg-gray-50 dark:bg-zinc-900/50 border-t border-gray-200 dark:border-zinc-800 py-16 text-center px-4">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Ready to get started?</h2>
-                <p className="text-gray-500 dark:text-zinc-400 mb-8 max-w-md mx-auto">Explore all our free tools and see why 100,000+ creators choose Klipto every month.</p>
+                <p className="text-gray-500 dark:text-zinc-400 mb-8 max-w-md mx-auto">Explore all our free tools and see why 100,000+ creators choose Kliptify every month.</p>
                 <Link href="/" className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-8 py-4 rounded-xl transition-all">
                     <Zap className="w-5 h-5" />
                     Explore All Tools

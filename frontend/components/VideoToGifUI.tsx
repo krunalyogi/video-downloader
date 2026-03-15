@@ -153,7 +153,7 @@ export const VideoToGifUI = () => {
             <div className="w-full max-w-4xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-3xl p-8 shadow-sm text-left mt-8">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Convert Video to GIF Online Free</h2>
                 <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                    Klipto provides the fastest and most secure way to convert your MP4, MOV, or WEBM videos into stunning, looping animated GIFs. Whether you are creating memes, reaction GIFs, or short animations for social media, our free online video to GIF maker handles it all entirely in your browser.
+                    Kliptify provides the fastest and most secure way to convert your MP4, MOV, or WEBM videos into stunning, looping animated GIFs. Whether you are creating memes, reaction GIFs, or short animations for social media, our free online video to GIF maker handles it all entirely in your browser.
                 </p>
                 
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Key Features of our GIF Converter</h3>

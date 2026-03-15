@@ -48,9 +48,9 @@ export const Navbar = () => {
                     {/* Logo */}
                     <div className="flex items-center gap-2">
                         <Link href="/" className="flex items-center gap-2">
-                            <Image src="/icon.png" alt="Klipto" width={28} height={28} className="rounded-md" priority />
+                            <Image src="/icon.png" alt="Kliptify" width={28} height={28} className="rounded-md" priority />
                             <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">
-                                Klipto
+                                Kliptify
                             </span>
                         </Link>
                     </div>

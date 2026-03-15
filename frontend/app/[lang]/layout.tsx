@@ -18,19 +18,19 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Klipto | Free Video Downloader & Creator Tools",
+  title: "Kliptify | Free Video Downloader & Creator Tools",
   description: "Download videos from Instagram, TikTok, YouTube, Facebook, Pinterest, Reddit and 20+ platforms. Free, no watermark, no login required.",
   manifest: '/manifest.json',
-  metadataBase: new URL('https://klipto.vercel.app'),
+  metadataBase: new URL('https://kliptify.com'),
   openGraph: {
-    title: 'Klipto | Free Video Downloader & Creator Tools',
+    title: 'Kliptify | Free Video Downloader & Creator Tools',
     description: 'Download from 20+ platforms — Instagram, TikTok, YouTube, Facebook, Reddit & more.',
     type: 'website',
-    siteName: 'Klipto',
+    siteName: 'Kliptify',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Klipto | Free Video Downloader',
+    title: 'Kliptify | Free Video Downloader',
     description: 'Download from 20+ platforms for free. No watermark, no login.',
   },
 };

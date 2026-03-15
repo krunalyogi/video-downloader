@@ -9,16 +9,16 @@ export const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                     <div className="col-span-1 md:col-span-1">
                         <Link href="/" className="flex items-center gap-2 mb-4">
-                            <Image src="/icon.png" alt="Klipto" width={28} height={28} className="rounded-md" />
-                            <span className="font-bold text-xl tracking-tight">Klipto</span>
+                            <Image src="/icon.png" alt="Kliptify" width={28} height={28} className="rounded-md" />
+                            <span className="font-bold text-xl tracking-tight">Kliptify</span>
                         </Link>
                         <p className="text-gray-500 dark:text-zinc-400 text-sm mb-4">
                             The ultimate suite of tools for content creators. Download, edit, and optimize your content for any platform.
                         </p>
                         <div className="flex gap-4">
-                            <a href="https://twitter.com/klipto" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-purple-600"><Twitter className="h-5 w-5" /></a>
-                            <a href="https://instagram.com/klipto" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-purple-600"><Instagram className="h-5 w-5" /></a>
-                            <a href="https://github.com/klipto" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-purple-600"><Github className="h-5 w-5" /></a>
+                            <a href="https://twitter.com/kliptify" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-purple-600"><Twitter className="h-5 w-5" /></a>
+                            <a href="https://instagram.com/kliptify" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-purple-600"><Instagram className="h-5 w-5" /></a>
+                            <a href="https://github.com/kliptify" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-purple-600"><Github className="h-5 w-5" /></a>
                         </div>
                     </div>
 
@@ -58,14 +58,14 @@ export const Footer = () => {
                 </div>
 
                 <div className="border-t border-gray-200 dark:border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 gap-3">
-                    <p>&copy; {new Date().getFullYear()} Klipto. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Kliptify. All rights reserved.</p>
                     <a
-                        href="https://www.buymeacoffee.com/klipto"
+                        href="https://www.buymeacoffee.com/kliptify"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold text-xs px-4 py-2 rounded-full transition-colors"
                     >
-                        ☕ Support Klipto
+                        ☕ Support Kliptify
                     </a>
                     <p className="mt-0">Built for creators worldwide.</p>
                 </div>

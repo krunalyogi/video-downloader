@@ -5,16 +5,16 @@ import { Zap, Sparkles, Video, Image as ImageIcon, Star, Download, Globe, Shield
 import { AdSlot } from "@/components/AdSlot";
 
 const TESTIMONIALS = [
-  { name: "Sarah M.", handle: "@sarahmakes", avatar: "SM", color: "from-purple-400 to-pink-500", rating: 5, text: "Klipto is literally the fastest downloader I've ever used. Saved 3 years of Instagram content in one afternoon!" },
+  { name: "Sarah M.", handle: "@sarahmakes", avatar: "SM", color: "from-purple-400 to-pink-500", rating: 5, text: "Kliptify is literally the fastest downloader I've ever used. Saved 3 years of Instagram content in one afternoon!" },
   { name: "Jake Rivera", handle: "@jakerivera_", avatar: "JR", color: "from-blue-400 to-cyan-500", rating: 5, text: "Finally, a TikTok downloader that actually removes the watermark AND works on iPhone. No other app could do this." },
-  { name: "Priya Patel", handle: "@priya.creates", avatar: "PP", color: "from-orange-400 to-red-500", rating: 5, text: "The AI Caption Generator saved me hours every week. My engagement went up 40% after using Klipto captions." },
+  { name: "Priya Patel", handle: "@priya.creates", avatar: "PP", color: "from-orange-400 to-red-500", rating: 5, text: "The AI Caption Generator saved me hours every week. My engagement went up 40% after using Kliptify captions." },
   { name: "Marcus Chen", handle: "@marcuschen.design", avatar: "MC", color: "from-green-400 to-emerald-500", rating: 5, text: "Background remover works better than Canva Pro and it's completely free. This is insane." },
-  { name: "Lana K.", handle: "@lana.digital", avatar: "LK", color: "from-violet-400 to-fuchsia-500", rating: 5, text: "I switched from SnapSave to Klipto and never looked back. More platforms, no watermarks, beautiful design." },
+  { name: "Lana K.", handle: "@lana.digital", avatar: "LK", color: "from-violet-400 to-fuchsia-500", rating: 5, text: "I switched from SnapSave to Kliptify and never looked back. More platforms, no watermarks, beautiful design." },
   { name: "Tom Bradley", handle: "@tombradley.yt", avatar: "TB", color: "from-yellow-400 to-orange-500", rating: 5, text: "YouTube to MP3 in 3 seconds flat. No annoying redirects, no fake download buttons. Just works." },
 ];
 
 export const metadata = {
-  title: "Klipto | Free Video Downloader & Creator Tools",
+  title: "Kliptify | Free Video Downloader & Creator Tools",
   description: "Download videos from Instagram, TikTok, YouTube, Facebook, Pinterest, Reddit, Vimeo and 20+ platforms. Free, fast, no watermark.",
 };
 

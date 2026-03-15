@@ -44,7 +44,7 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:3000',
-  'https://klipto.vercel.app',
+  'https://kliptify.com',
   'http://localhost:3000',
   'http://localhost:3001',
 ];
@@ -94,7 +94,7 @@ app.use('/api/ai', aiRoutes);
 
 // Base Route
 app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'Klipto API is running ✓', uptime: process.uptime() });
+  res.json({ message: 'Kliptify API is running ✓', uptime: process.uptime() });
 });
 
 // Start Server using the HTTP server (not app) so WebSockets work

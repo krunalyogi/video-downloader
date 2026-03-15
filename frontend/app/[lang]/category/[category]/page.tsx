@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: { category: string 
     if (!title) return { title: 'Not Found' };
 
     return {
-        title: `${title} | Klipto`,
+        title: `${title} | Kliptify`,
         description: `Explore the best ${title.toLowerCase()} for content creators.`,
     };
 }

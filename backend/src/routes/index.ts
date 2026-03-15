@@ -5,7 +5,7 @@ const router = Router();
 
 // Test route
 router.get('/status', (req, res) => {
-    res.json({ status: 'ok', api: 'Klipto' });
+    res.json({ status: 'ok', api: 'Kliptify' });
 });
 
 // Downloader Routes

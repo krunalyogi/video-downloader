@@ -1,6 +1,6 @@
 {
-  "name": "Klipto",
-  "short_name": "Klipto",
+  "name": "Kliptify",
+  "short_name": "Kliptify",
   "description": "Free video downloader and creator tools for Instagram, TikTok, YouTube, Facebook, and 20+ platforms.",
   "start_url": "/",
   "display": "standalone",
@@ -32,7 +32,7 @@
       "src": "/og-image.png",
       "sizes": "1200x630",
       "type": "image/png",
-      "label": "Klipto - The Creator Toolkit"
+      "label": "Kliptify - The Creator Toolkit"
     }
   ],
   "categories": ["utilities", "productivity"],

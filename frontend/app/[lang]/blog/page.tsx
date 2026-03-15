@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Calendar, Clock, ArrowRight, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Blog — Creator Tips, Tutorials & Guides | Klipto',
-    description: 'Learn how to download videos, optimize your social media content, and use free creator tools with step-by-step guides from the Klipto team.',
+    title: 'Blog — Creator Tips, Tutorials & Guides | Kliptify',
+    description: 'Learn how to download videos, optimize your social media content, and use free creator tools with step-by-step guides from the Kliptify team.',
 };
 
 const POSTS = [

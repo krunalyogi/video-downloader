@@ -1,4 +1,4 @@
-const CACHE_NAME = 'klipto-v1';
+const CACHE_NAME = 'kliptify-v1';
 const STATIC_ASSETS = [
     '/',
     '/about',

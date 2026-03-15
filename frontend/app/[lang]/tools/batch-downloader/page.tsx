@@ -3,7 +3,7 @@ import { BatchDownloaderUI } from '@/components/BatchDownloaderUI';
 import { Download, Zap, Shield, List } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Batch Video Downloader — Download Multiple URLs at Once | Klipto',
+    title: 'Batch Video Downloader — Download Multiple URLs at Once | Kliptify',
     description: 'Download up to 10 videos at once from Instagram, TikTok, YouTube, Facebook and more. Free batch downloader with no limits.',
 };
 

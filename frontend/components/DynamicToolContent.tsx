@@ -22,7 +22,7 @@ export function DynamicToolContent({ tool, renderSlug }: Props) {
                         How to use the Free {tool.name}
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                        Downloading videos using our {tool.name} is the fastest way to save your favorite content offline. Whether you want to preserve a funny clip, save a tutorial for offline viewing, or backup your own content, Klipto provides a seamless, watermark-free experience. There is no software to install and no registration required.
+                        Downloading videos using our {tool.name} is the fastest way to save your favorite content offline. Whether you want to preserve a funny clip, save a tutorial for offline viewing, or backup your own content, Kliptify provides a seamless, watermark-free experience. There is no software to install and no registration required.
                     </p>
 
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
@@ -39,7 +39,7 @@ export function DynamicToolContent({ tool, renderSlug }: Props) {
                         Supported Formats & Quality
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                        By default, Klipto processes and delivers your {platformName} files in standard `.mp4` video container formats for maximum compatibility with all modern media players, editing software, and mobile devices. Audio-only extractions are delivered in crisp `.mp3` format.
+                        By default, Kliptify processes and delivers your {platformName} files in standard `.mp4` video container formats for maximum compatibility with all modern media players, editing software, and mobile devices. Audio-only extractions are delivered in crisp `.mp3` format.
                     </p>
                 </>
             )}
@@ -53,7 +53,7 @@ export function DynamicToolContent({ tool, renderSlug }: Props) {
                         Process, convert, and optimize your media effortlessly with our web-based {tool.name}. Designed for photographers, web developers, and social media managers, our utility provides professional-grade processing directly inside your browser. No data leaves your machine unless strictly necessary for computationally heavy ML models.
                     </p>
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                        Benefits of using Klipto Image Utilities
+                        Benefits of using Kliptify Image Utilities
                     </h3>
                     <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2">
                         <li><strong>Rapid Processing:</strong> Harness WebAssembly (WASM) to process images blazingly fast using your own device&apos;s hardware.</li>

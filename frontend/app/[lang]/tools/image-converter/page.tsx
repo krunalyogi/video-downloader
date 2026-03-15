@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: 'Image Format Converter — PNG to WebP, JPG to PNG | Klipto',
+    title: 'Image Format Converter — PNG to WebP, JPG to PNG | Kliptify',
     description: 'Convert image formats online for free. PNG to WebP, JPG to PNG, HEIC to JPG and more. No upload limit, no quality loss.',
 };
 
