@@ -42,13 +42,21 @@ export const VideoToGifUI = () => {
                 body: formData,
             });
 
-            const data = await response.json();
-
-            if (!response.ok || !data.success) {
-                throw new Error(data.error || "Failed to convert video");
+            if (!response.ok) {
+                let errorMsg = "Failed to convert video";
+                try {
+                    const data = await response.json();
+                    if (data.error) errorMsg = data.error;
+                } catch { }
+                throw new Error(errorMsg);
             }
 
-            setResult(data.result);
+            const blob = await response.blob();
+            const size = parseInt(response.headers.get("X-Gif-Size") || "0", 10) || blob.size;
+            const name = response.headers.get("X-File-Name") || "converted.gif";
+            const dataUrl = URL.createObjectURL(blob);
+
+            setResult({ dataUrl, name, size });
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "An error occurred");
         } finally {

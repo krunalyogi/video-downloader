@@ -10,7 +10,7 @@ interface DownloadResult {
     platform: string;
     title: string;
     thumbnail: string;
-    formats: { quality: string; type: string; url: string; label: string }[];
+    formats: { quality: string; type: string; url: string; label: string; filesize?: number | null }[];
 }
 
 const SUPPORTED_PLATFORMS = "YouTube, Instagram, TikTok, Twitter/X, Facebook, Reddit, Pinterest, Vimeo, Twitch, Snapchat, Dailymotion, SoundCloud";
@@ -18,6 +18,7 @@ const SUPPORTED_PLATFORMS = "YouTube, Instagram, TikTok, Twitter/X, Facebook, Re
 export const DownloaderInput = () => {
     const [url, setUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
     const [result, setResult] = useState<DownloadResult | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [clipboardHint, setClipboardHint] = useState(false);
@@ -29,8 +30,23 @@ export const DownloaderInput = () => {
         if (!url) return;
 
         setIsLoading(true);
+        setLoadingMessage("Connecting to server...");
         setResult(null);
         setError(null);
+
+        // Rotating messages to keep users engaged during yt-dlp fetches
+        const messages = [
+            "Connecting to server...",
+            "Extracting video metadata...",
+            "Bypassing restrictions...",
+            "Parsing media formats...",
+            "Finalizing download links..."
+        ];
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => {
+            msgIndex = (msgIndex + 1) % messages.length;
+            setLoadingMessage(messages[msgIndex]);
+        }, 1500);
 
         try {
             const response = await fetch("/api/download", {
@@ -39,6 +55,7 @@ export const DownloaderInput = () => {
                 body: JSON.stringify({ url })
             });
 
+            clearInterval(msgInterval);
             const data = await response.json();
 
             if (!response.ok) {
@@ -47,9 +64,11 @@ export const DownloaderInput = () => {
 
             setResult(data);
         } catch (err: unknown) {
+            clearInterval(msgInterval);
             setError(err instanceof Error ? err.message : "An unknown error occurred");
         } finally {
             setIsLoading(false);
+            setLoadingMessage("");
         }
     };
 
@@ -133,9 +152,29 @@ export const DownloaderInput = () => {
                         )}
                     </button>
                 </div>
-                <p className="text-center text-sm text-gray-500 mt-4">
-                    Supports {SUPPORTED_PLATFORMS}
-                </p>
+                <div className="h-6 mt-4">
+                    <AnimatePresence mode="wait">
+                        {isLoading ? (
+                            <motion.p
+                                key={loadingMessage}
+                                initial={{ opacity: 0, y: 5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -5 }}
+                                className="text-center text-sm font-medium text-purple-600 dark:text-purple-400 flex items-center justify-center gap-2"
+                            >
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" /> {loadingMessage}
+                            </motion.p>
+                        ) : (
+                            <motion.p 
+                                key="supported"
+                                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                                className="text-center text-sm text-gray-500"
+                            >
+                                Supports {SUPPORTED_PLATFORMS}
+                            </motion.p>
+                        )}
+                    </AnimatePresence>
+                </div>
             </motion.form>
 
             <AnimatePresence>
@@ -192,7 +231,7 @@ export const DownloaderInput = () => {
                                             className="flex justify-between items-center w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-gray-200 dark:border-zinc-700 rounded-lg transition-colors group text-left max-w-full"
                                         >
                                             <span className="font-medium text-gray-700 dark:text-gray-300 truncate pr-2">
-                                                {format.quality} <span className="text-gray-400 dark:text-gray-500 text-xs ml-1">({format.type})</span>
+                                                {format.quality} <span className="text-gray-400 dark:text-gray-500 text-xs ml-1">({format.type}{format.filesize ? ` · ${(format.filesize / (1024 * 1024)).toFixed(1)} MB` : ''})</span>
                                             </span>
                                             <span className="flex items-center gap-1 text-purple-600 dark:text-purple-400 font-semibold group-hover:underline text-sm flex-shrink-0">
                                                 <Download className="w-4 h-4" />

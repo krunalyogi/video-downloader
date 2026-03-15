@@ -47,27 +47,35 @@ export const convertToGif = async (req: Request, res: Response): Promise<void> =
                 .save(outputPath);
         });
 
-        const gifBuffer = await fs.promises.readFile(outputPath);
-        const dataUrl = `data:image/gif;base64,${gifBuffer.toString('base64')}`;
-        const sizeKB = (gifBuffer.length / 1024).toFixed(0);
+        // Pipe binary directly to client to prevent massive base64 memory spikes
+        const filename = `${path.parse(req.file.originalname).name}.gif`;
+        res.setHeader('Content-Type', 'image/gif');
+        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+        res.setHeader('Access-Control-Expose-Headers', 'X-Gif-Size, X-File-Name');
+        
+        const stat = await fs.promises.stat(outputPath);
+        res.setHeader('X-Gif-Size', stat.size.toString());
+        res.setHeader('X-File-Name', filename);
 
-        res.json({
-            success: true,
-            result: {
-                dataUrl,
-                name: `${path.parse(req.file.originalname).name}.gif`,
-                size: gifBuffer.length,
-                info: `${width}px wide · ${fps}fps · ${sizeKB}KB`
-            }
+        const readStream = fs.createReadStream(outputPath);
+        
+        readStream.on('close', () => {
+            try {
+                if (inputPath && fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+                if (outputPath && fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+            } catch {}
         });
+
+        readStream.pipe(res);
 
     } catch (error: any) {
         console.error('[VideoController] FFmpeg error:', error.message);
-        res.status(500).json({ success: false, error: 'Failed to convert video to GIF. Try a shorter clip or smaller resolution.' });
-    } finally {
+        if (!res.headersSent) {
+            res.status(500).json({ success: false, error: 'Failed to convert video to GIF. Try a shorter clip or smaller resolution.' });
+        }
         try {
             if (inputPath && fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
             if (outputPath && fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
-        } catch { /* cleanup errors are non-fatal */ }
+        } catch {}
     }
 };

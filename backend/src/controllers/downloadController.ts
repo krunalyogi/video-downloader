@@ -38,37 +38,54 @@ export const proxyStream = async (req: Request, res: Response): Promise<void> =>
         return;
     }
 
+    const forwardHeaders = (sourceRes: http.IncomingMessage, targetRes: Response, file: string) => {
+        if (sourceRes.statusCode) {
+            targetRes.status(sourceRes.statusCode);
+        }
+
+        // Essential headers for Pause/Resume to work flawlessly
+        const headersToForward = ['content-type', 'content-length', 'accept-ranges', 'content-range'];
+        
+        headersToForward.forEach(header => {
+            if (sourceRes.headers[header]) {
+                targetRes.setHeader(header, sourceRes.headers[header] as string);
+            }
+        });
+
+        // Always enforce file download
+        targetRes.setHeader('Content-Disposition', `attachment; filename="${file}"`);
+    };
+
     try {
         const client = targetUrl.startsWith('https') ? https : http;
         
-        client.get(targetUrl, (streamRes) => {
+        const options: http.RequestOptions = {};
+        if (req.headers.range) {
+            options.headers = { 'Range': req.headers.range };
+        }
+
+        client.get(targetUrl, options, (streamRes) => {
             if (streamRes.statusCode && streamRes.statusCode >= 300 && streamRes.statusCode < 400 && streamRes.headers.location) {
-                // Handle redirect
-                client.get(streamRes.headers.location, (redirectRes) => {
-                    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-                    res.setHeader('Content-Type', redirectRes.headers['content-type'] || 'application/octet-stream');
+                // Follow the redirect with original Range headers
+                const redirectClient = streamRes.headers.location.startsWith('https') ? https : http;
+                redirectClient.get(streamRes.headers.location, options, (redirectRes) => {
+                    forwardHeaders(redirectRes, res, filename);
                     redirectRes.pipe(res);
                 }).on('error', (e) => {
-                    res.status(500).send('Error following redirect: ' + e.message);
+                    console.error('Redirect proxy error:', e);
+                    if (!res.headersSent) res.status(500).send('Error following redirect');
                 });
                 return;
             }
 
-            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-            res.setHeader('Content-Type', streamRes.headers['content-type'] || 'application/octet-stream');
-            
-            // Forward Content-Length if available to show download progress
-            if (streamRes.headers['content-length']) {
-                res.setHeader('Content-Length', streamRes.headers['content-length']);
-            }
-
+            forwardHeaders(streamRes, res, filename);
             streamRes.pipe(res);
         }).on('error', (e) => {
             console.error('Proxy stream error:', e);
-            res.status(500).send('Failed to stream file');
+            if (!res.headersSent) res.status(500).send('Failed to stream file');
         });
     } catch (error) {
         console.error('Proxy stream try-catch error:', error);
-        res.status(500).send('Internal Server Error');
+        if (!res.headersSent) res.status(500).send('Internal Server Error');
     }
 };

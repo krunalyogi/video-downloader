@@ -33,9 +33,9 @@ export const handleDownload = async (url: string) => {
                         title: tikData.data.title || 'TikTok Video',
                         thumbnail: tikData.data.cover || tikData.data.origin_cover || '',
                         formats: [
-                            { quality: 'HD No Watermark', type: 'video/mp4', url: tikData.data.hdplay || tikData.data.play, label: 'Download HD' },
-                            { quality: 'No Watermark', type: 'video/mp4', url: tikData.data.play, label: 'Download SD' },
-                            { quality: 'Audio Only', type: 'audio/mp3', url: tikData.data.music, label: 'Download MP3' }
+                            { quality: 'HD No Watermark', type: 'video/mp4', url: tikData.data.hdplay || tikData.data.play, label: 'Download HD', filesize: tikData.data.hd_size || null },
+                            { quality: 'No Watermark', type: 'video/mp4', url: tikData.data.play, label: 'Download SD', filesize: tikData.data.size || null },
+                            { quality: 'Audio Only', type: 'audio/mp3', url: tikData.data.music, label: 'Download MP3', filesize: null }
                         ].filter(f => f.url)
                     };
                     if (cacheKey) {
@@ -81,7 +81,8 @@ export const handleDownload = async (url: string) => {
             quality: f.format_note || (f.height ? `${f.height}p` : f.resolution) || 'Auto',
             type: `${f.vcodec && f.vcodec !== 'none' ? 'video' : 'audio'}/${f.ext}`,
             url: f.url,
-            label: `Download ${f.ext?.toUpperCase() || 'MP4'}`
+            label: `Download ${f.ext?.toUpperCase() || 'MP4'}`,
+            filesize: f.filesize || f.filesize_approx || null
         }));
 
         // Deduplicate by quality label
@@ -103,7 +104,7 @@ export const handleDownload = async (url: string) => {
             thumbnail: bestThumbnail,
             formats: uniqueFormats.length > 0
                 ? (uniqueFormats as any[]).slice(0, 6)
-                : [{ quality: 'Original', type: jsonMeta.ext || 'mp4', url: jsonMeta.url, label: 'Download' }]
+                : [{ quality: 'Original', type: jsonMeta.ext || 'mp4', url: jsonMeta.url, label: 'Download', filesize: jsonMeta.filesize || null }]
         };
 
         // ── SAVE TO CACHE ──
