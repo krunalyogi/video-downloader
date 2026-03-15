@@ -1,8 +1,24 @@
+import { connection as redisClient } from '../config/redis';
 const ytDlp = require('yt-dlp-exec');
 
 export const handleDownload = async (url: string) => {
     try {
         console.log(`[Service] Processing download request for ${url}`);
+
+        // ── CACHE CHECK ──
+        let cacheKey = '';
+        if (process.env.ENABLE_DOWNLOAD_CACHE === 'true' && redisClient.status === 'ready') {
+            cacheKey = `dl_meta:${Buffer.from(url).toString('base64')}`;
+            try {
+                const cachedData = await redisClient.get(cacheKey);
+                if (cachedData) {
+                    console.log(`[Service] Returning cached metadata for ${url}`);
+                    return JSON.parse(cachedData);
+                }
+            } catch (cacheErr) {
+                console.warn('[Service] Redis cache read error:', cacheErr);
+            }
+        }
 
         // ── TikTok: use TikWM API first (faster, no-watermark, more reliable) ──
         if (url.includes('tiktok.com')) {
@@ -12,7 +28,7 @@ export const handleDownload = async (url: string) => {
                 const tikData = await tikRes.json() as any;
 
                 if (tikData && tikData.code === 0 && tikData.data) {
-                    return {
+                    const result = {
                         platform: 'TikTok',
                         title: tikData.data.title || 'TikTok Video',
                         thumbnail: tikData.data.cover || tikData.data.origin_cover || '',
@@ -22,6 +38,12 @@ export const handleDownload = async (url: string) => {
                             { quality: 'Audio Only', type: 'audio/mp3', url: tikData.data.music, label: 'Download MP3' }
                         ].filter(f => f.url)
                     };
+                    if (cacheKey) {
+                        try {
+                            await redisClient.setex(cacheKey, 43200, JSON.stringify(result)); // Cache 12 hours
+                        } catch (e) {}
+                    }
+                    return result;
                 }
             } catch (err) {
                 console.log('[Service] TikWM API failed, trying yt-dlp...');
@@ -29,7 +51,7 @@ export const handleDownload = async (url: string) => {
         }
 
         // ── All other platforms: yt-dlp-exec ─────────────────────────────────
-        const data = await ytDlp(url, {
+        const ytOptions: any = {
             dumpJson: true,
             noWarnings: true,
             preferFreeFormats: true,
@@ -40,7 +62,14 @@ export const handleDownload = async (url: string) => {
                 'referer:youtube.com',
                 'user-agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
             ]
-        });
+        };
+
+        if (process.env.PROXY_URL) {
+            ytOptions.proxy = process.env.PROXY_URL;
+            console.log('[Service] Routing yt-dlp through proxy...');
+        }
+
+        const data = await ytDlp(url, ytOptions);
 
         const jsonMeta = data as any;
         const availableFormats = jsonMeta.formats?.filter((f: any) =>
@@ -68,7 +97,7 @@ export const handleDownload = async (url: string) => {
 
         const title = jsonMeta.title || jsonMeta.description || 'Social Media Video';
 
-        return {
+        const result = {
             platform: jsonMeta.extractor_key || jsonMeta.extractor || 'Video',
             title: title.length > 80 ? title.substring(0, 80) + '...' : title,
             thumbnail: bestThumbnail,
@@ -76,6 +105,18 @@ export const handleDownload = async (url: string) => {
                 ? (uniqueFormats as any[]).slice(0, 6)
                 : [{ quality: 'Original', type: jsonMeta.ext || 'mp4', url: jsonMeta.url, label: 'Download' }]
         };
+
+        // ── SAVE TO CACHE ──
+        if (cacheKey) {
+            try {
+                // Cache yt-dlp metadata for 6 hours (URL links often expire)
+                await redisClient.setex(cacheKey, 21600, JSON.stringify(result));
+            } catch (cacheErr) {
+                console.warn('[Service] Redis cache write error:', cacheErr);
+            }
+        }
+
+        return result;
 
     } catch (error: unknown) {
         if (error instanceof Error) {

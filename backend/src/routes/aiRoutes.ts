@@ -96,7 +96,7 @@ Rules:
 - Return ONLY a raw JSON array of strings, nothing else.
 - Each hashtag must start with "#".
 - Mix popular (1M+ posts), mid-range (100K-1M), and niche (10K-100K) hashtags.
-- Optimize for Instagram and TikTok reach in 2025.
+- Optimize for Instagram and TikTok reach in 2026.
 
 Example format: ["#hashtag1", "#hashtag2", ...]`;
 
