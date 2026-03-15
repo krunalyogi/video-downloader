@@ -46,9 +46,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // 4. Static Blog Articles currently tracked
     [
-        'download-trending-instagram-audio',
-        'video-to-gif-converter-guide',
-        'best-ai-youtube-title-generator',
+        'how-to-remove-background-from-product-photos',
+        'download-twitter-videos-and-gifs',
+        'how-to-download-reddit-videos-with-audio',
         'how-to-download-instagram-reels-without-watermark',
         'tiktok-downloader-no-watermark-guide',
         'youtube-to-mp3-guide',
