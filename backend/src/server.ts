@@ -97,24 +97,31 @@ app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Kliptify API is running ✓', uptime: process.uptime() });
 });
 
-// Start Server using the HTTP server (not app) so WebSockets work
-httpServer.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+export const runServer = () => {
+    // Start Server using the HTTP server (not app) so WebSockets work
+    httpServer.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
 
-  // ── Keep-alive self-ping (prevents Render free tier cold starts) ──────────
-  // Render spins down free services after 15 minutes of inactivity.
-  // We ping ourselves every 10 minutes to stay warm.
-  if (process.env.NODE_ENV === 'production' || process.env.RENDER) {
-    const selfUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
-    setInterval(async () => {
-      try {
-        const fetch = (await import('node-fetch')).default;
-        await fetch(selfUrl);
-        console.log('[KeepAlive] Self-ping sent to', selfUrl);
-      } catch {
-        // Non-fatal — best effort keep-alive
+      // ── Keep-alive self-ping (prevents Render free tier cold starts) ──────────
+      // Render spins down free services after 15 minutes of inactivity.
+      // We ping ourselves every 10 minutes to stay warm.
+      if (process.env.NODE_ENV === 'production' || process.env.RENDER) {
+        const selfUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+        setInterval(async () => {
+          try {
+            const fetch = (await import('node-fetch')).default;
+            await fetch(selfUrl);
+            console.log('[KeepAlive] Self-ping sent to', selfUrl);
+          } catch {
+            // Non-fatal — best effort keep-alive
+          }
+        }, 10 * 60 * 1000); // Every 10 minutes
+        console.log('[KeepAlive] Self-ping enabled — backend will stay warm');
       }
-    }, 10 * 60 * 1000); // Every 10 minutes
-    console.log('[KeepAlive] Self-ping enabled — backend will stay warm');
-  }
-});
+    });
+};
+
+// If run directly (not via cluster), start the server
+if (require.main === module) {
+    runServer();
+}
