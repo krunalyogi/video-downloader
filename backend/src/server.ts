@@ -104,9 +104,9 @@ export const runServer = () => {
 
       // ── Keep-alive self-ping (prevents Render free tier cold starts) ──────────
       // Render spins down free services after 15 minutes of inactivity.
-      // We ping ourselves every 10 minutes to stay warm.
-      if (process.env.NODE_ENV === 'production' || process.env.RENDER) {
-        const selfUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+      // Only enable when RENDER_EXTERNAL_URL is explicitly set to avoid pinging localhost.
+      const selfUrl = process.env.RENDER_EXTERNAL_URL;
+      if (selfUrl && (process.env.NODE_ENV === 'production' || process.env.RENDER)) {
         setInterval(async () => {
           try {
             const fetch = (await import('node-fetch')).default;
@@ -116,7 +116,7 @@ export const runServer = () => {
             // Non-fatal — best effort keep-alive
           }
         }, 10 * 60 * 1000); // Every 10 minutes
-        console.log('[KeepAlive] Self-ping enabled — backend will stay warm');
+        console.log('[KeepAlive] Self-ping enabled —', selfUrl);
       }
     });
 };

@@ -16,6 +16,7 @@ export const AICaptionGeneratorUI = () => {
     const [copied, setCopied] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hasSubscribed, setHasSubscribed] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -46,22 +47,29 @@ export const AICaptionGeneratorUI = () => {
     const executeGeneration = async () => {
         setIsGenerating(true);
         setResult(null);
+        setError(null);
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/captions`, {
+            // Fix: corrected port fallback from 5000 → 5002
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002'}/api/ai/captions`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ topic, platform, tone })
             });
-            const data = await res.json();
+            // Fix: safe JSON parse
+            const text = await res.text();
+            let data;
+            try { data = JSON.parse(text); }
+            catch { throw new Error('The AI service returned an unexpected response. Please try again.'); }
 
             if (data.success) {
                 setResult(data.result);
             } else {
-                alert("Failed to generate caption. " + (data.error || ""));
+                // Fix: replaced alert() with proper error state
+                setError(data.error || "Failed to generate caption. Please try again.");
             }
-        } catch (error) {
-            console.error("API error", error);
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "An unknown error occurred.");
         } finally {
             setIsGenerating(false);
         }
@@ -140,6 +148,17 @@ export const AICaptionGeneratorUI = () => {
                 </div>
             </div>
 
+            {/* Error State */}
+            {error && (
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl border border-red-200 dark:border-red-900/50 flex items-center gap-3"
+                >
+                    <span className="text-sm">{error}</span>
+                </motion.div>
+            )}
+
             {/* Result Area */}
             {result && (
                 <motion.div
@@ -160,13 +179,24 @@ export const AICaptionGeneratorUI = () => {
                     <div className="prose dark:prose-invert max-w-none">
                         <p className="text-lg whitespace-pre-wrap mb-6 text-gray-800 dark:text-gray-200">{result.caption}</p>
 
+                        {/* Character counter — helps users stay within platform limits */}
+                        <p className="text-xs text-gray-400 dark:text-zinc-500 mb-4">
+                            {result.caption.length} characters
+                            {platform === 'twitter' && result.caption.length > 280 && <span className="ml-2 text-red-500 font-semibold">⚠ Exceeds X/Twitter 280 char limit</span>}
+                            {platform === 'instagram' && result.caption.length > 2200 && <span className="ml-2 text-red-500 font-semibold">⚠ Exceeds Instagram 2200 char limit</span>}
+                        </p>
+
                         <div className="flex flex-wrap gap-2 mt-6">
                             {result.hashtags.map((tag, idx) => (
-                                <span key={idx} className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-zinc-800 border border-purple-200 dark:border-purple-800 rounded-full text-sm font-medium text-purple-700 dark:text-purple-400">
+                                <span key={idx} className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-zinc-800 border border-purple-200 dark:border-purple-800 rounded-full text-sm font-medium text-purple-700 dark:text-purple-400 cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                                    onClick={() => navigator.clipboard.writeText(tag)}
+                                    title="Click to copy"
+                                >
                                     <Hash className="w-3 h-3" /> {tag.replace('#', '')}
                                 </span>
                             ))}
                         </div>
+                        <p className="text-xs text-gray-400 mt-2">Click any hashtag to copy it individually</p>
                     </div>
                 </motion.div>
             )}

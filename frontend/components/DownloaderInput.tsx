@@ -18,6 +18,7 @@ export const DownloaderInput = () => {
     const [url, setUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [loadingMessage, setLoadingMessage] = useState("");
+    const [slowWarning, setSlowWarning] = useState(false);
     const [result, setResult] = useState<DownloadResult | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [clipboardHint, setClipboardHint] = useState(false);
@@ -32,6 +33,7 @@ export const DownloaderInput = () => {
         setLoadingMessage("Connecting to server...");
         setResult(null);
         setError(null);
+        setSlowWarning(false);
 
         // Rotating messages to keep users engaged during yt-dlp fetches
         const messages = [
@@ -47,6 +49,9 @@ export const DownloaderInput = () => {
             setLoadingMessage(messages[msgIndex]);
         }, 1500);
 
+        // Advisory fix: show a slow warning after 8 seconds
+        const slowTimer = setTimeout(() => setSlowWarning(true), 8000);
+
         try {
             const response = await fetch("/api/download", {
                 method: "POST",
@@ -55,6 +60,7 @@ export const DownloaderInput = () => {
             });
 
             clearInterval(msgInterval);
+            clearTimeout(slowTimer);
             const data = await response.json();
 
             if (!response.ok) {
@@ -64,10 +70,12 @@ export const DownloaderInput = () => {
             setResult(data);
         } catch (err: unknown) {
             clearInterval(msgInterval);
+            clearTimeout(slowTimer);
             setError(err instanceof Error ? err.message : "An unknown error occurred");
         } finally {
             setIsLoading(false);
             setLoadingMessage("");
+            setSlowWarning(false);
         }
     };
 
@@ -154,15 +162,22 @@ export const DownloaderInput = () => {
                 <div className="h-6 mt-4">
                     <AnimatePresence mode="wait">
                         {isLoading ? (
-                            <motion.p
+                            <motion.div
                                 key={loadingMessage}
                                 initial={{ opacity: 0, y: 5 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -5 }}
-                                className="text-center text-sm font-medium text-purple-600 dark:text-purple-400 flex items-center justify-center gap-2"
+                                className="flex flex-col items-center gap-1"
                             >
-                                <Loader2 className="w-3.5 h-3.5 animate-spin" /> {loadingMessage}
-                            </motion.p>
+                                <p className="text-center text-sm font-medium text-purple-600 dark:text-purple-400 flex items-center justify-center gap-2">
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> {loadingMessage}
+                                </p>
+                                {slowWarning && (
+                                    <p className="text-center text-xs text-amber-500 dark:text-amber-400 animate-pulse">
+                                        ⏳ This is taking longer than usual — still working...
+                                    </p>
+                                )}
+                            </motion.div>
                         ) : (
                             <motion.p 
                                 key="supported"

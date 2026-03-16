@@ -68,8 +68,9 @@ export const convertToGif = async (req: Request, res: Response): Promise<void> =
 
         readStream.pipe(res);
 
-    } catch (error: any) {
-        console.error('[VideoController] FFmpeg error:', error.message);
+    } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : String(error);
+        console.error('[VideoController] FFmpeg error:', msg);
         if (!res.headersSent) {
             res.status(500).json({ success: false, error: 'Failed to convert video to GIF. Try a shorter clip or smaller resolution.' });
         }
