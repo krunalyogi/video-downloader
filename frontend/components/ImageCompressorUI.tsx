@@ -63,9 +63,12 @@ export const ImageCompressorUI = () => {
         setError(null);
         setResults([]);
 
-        const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002";
         const newResults: CompressorResult[] = [];
-        
+
+        // Bug Fix #3: create a SINGLE socket for all jobs, avoid per-file socket leak
+        const socket = io(backendUrl);
+
         try {
             // Process sequentially to not overload socket/server memory on large batches
             for (let i = 0; i < files.length; i++) {
@@ -89,23 +92,24 @@ export const ImageCompressorUI = () => {
                 // If sync processed, it returns result directly
                 if (data.result) {
                     newResults.push(data.result);
-                } 
+                }
                 // If async (BullMQ), we await socket resolution
                 else if (data.jobId) {
                     await new Promise<void>((resolve, reject) => {
-                        const socket = io(backendUrl);
-                        socket.on("connect", () => socket.emit("subscribe_job", data.jobId));
-                        
-                        socket.on("progress", (event: { progress: number, status: string, resultData?: CompressorResult }) => {
+                        // Reuse the single socket, subscribe to this specific job
+                        socket.emit("subscribe_job", data.jobId);
+
+                        const onProgress = (event: { progress: number, status: string, resultData?: CompressorResult }) => {
                             if (event.progress === 100 && event.resultData) {
+                                socket.off("progress", onProgress);
                                 newResults.push(event.resultData);
-                                socket.disconnect();
                                 resolve();
                             }
-                        });
+                        };
+                        socket.on("progress", onProgress);
 
                         setTimeout(() => {
-                            socket.disconnect();
+                            socket.off("progress", onProgress);
                             reject(new Error(`Timeout processing ${f.name}`));
                         }, 30000);
                     });
@@ -120,6 +124,7 @@ export const ImageCompressorUI = () => {
              setError(err instanceof Error ? err.message : "An error occurred during batch processing");
         } finally {
              setIsLoading(false);
+             socket.disconnect(); // Bug Fix #3: always disconnect after all jobs done
         }
     };
 
@@ -337,7 +342,7 @@ export const ImageCompressorUI = () => {
                                 onClick={handleDownload}
                                 className="w-full flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md shadow-emerald-500/20 mt-2"
                             >
-                                <Download className="w-5 h-5" /> {results.length === 1 ? 'Download PNG' : 'Download ZIP'}
+                                <Download className="w-5 h-5" /> {results.length === 1 ? `Download ${results[0].format?.toUpperCase() || 'File'}` : 'Download ZIP'}
                             </button>
                         </div>
                     </motion.div>

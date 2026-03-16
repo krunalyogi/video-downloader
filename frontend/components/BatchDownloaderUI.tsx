@@ -45,8 +45,12 @@ export const BatchDownloaderUI = () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: job.url }),
                 });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Failed');
+                // Issue #5 Fix: safe JSON parse to avoid SyntaxError on server timeouts
+                const text = await res.text();
+                let data;
+                try { data = JSON.parse(text); }
+                catch { throw new Error('Server returned an unexpected response. Please try again.'); }
+                if (!res.ok) throw new Error(data?.error || 'Failed');
                 setJobs(prev => prev.map(j => j.id === job.id ? { ...j, status: 'done', result: data } : j));
             } catch (err) {
                 setJobs(prev => prev.map(j => j.id === job.id ? { ...j, status: 'error', error: err instanceof Error ? err.message : 'Error' } : j));

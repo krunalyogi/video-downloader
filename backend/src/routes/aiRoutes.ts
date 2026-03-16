@@ -14,7 +14,10 @@ const getGemini = () => {
 // ── POST /api/ai/captions ────────────────────────────────────────────────────
 router.post('/captions', async (req: Request, res: Response): Promise<void> => {
     try {
-        const { topic, platform, tone } = req.body;
+        // Issue #6 Fix: sanitize and limit inputs to prevent prompt injection
+        const topic = (req.body.topic || '').toString().trim().slice(0, 500);
+        const platform = (req.body.platform || 'Instagram').toString().trim().slice(0, 50);
+        const tone = (req.body.tone || 'Engaging').toString().trim().slice(0, 50);
 
         if (!topic) {
             res.status(400).json({ error: 'Topic is required' });
@@ -83,7 +86,8 @@ Return ONLY the caption text. Do not add any preamble or explanation.`;
 // ── POST /api/ai/hashtags ─────────────────────────────────────────────────────
 router.post('/hashtags', async (req: Request, res: Response): Promise<void> => {
     try {
-        const { topic } = req.body;
+        // Issue #6 Fix: sanitize and limit inputs to prevent prompt injection
+        const topic = (req.body.topic || '').toString().trim().slice(0, 500);
 
         if (!topic) {
             res.status(400).json({ error: 'Topic is required' });

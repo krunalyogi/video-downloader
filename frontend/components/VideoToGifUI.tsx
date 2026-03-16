@@ -36,11 +36,17 @@ export const VideoToGifUI = () => {
         formData.append("video", file);
 
         try {
-            const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002";
+            // Issue B Fix: prevent indefinite spinner if backend hangs
+            const controller = new AbortController();
+            const gifTimeout = setTimeout(() => controller.abort(), 60000);
+
             const response = await fetch(`${backendUrl}/api/video/gif`, {
                 method: "POST",
                 body: formData,
+                signal: controller.signal,
             });
+            clearTimeout(gifTimeout);
 
             if (!response.ok) {
                 let errorMsg = "Failed to convert video";

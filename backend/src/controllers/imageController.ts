@@ -17,18 +17,20 @@ export const compressImage = async (req: Request, res: Response): Promise<void> 
             try {
                 const { imageQueue } = await import('../jobs/imageQueue');
                 if (!imageQueue) throw new Error('Image queue not initialized');
+                // Bug Fix #2: Generate jobIdDb ONCE so the socket subscription matches
+                const jobIdDb = `job_${Date.now()}`;
                 const job = await imageQueue.add('compress', {
                     fileBufferObject: req.file.buffer,
                     originalname: req.file.originalname,
                     processFormat,
                     quality,
-                    jobIdDb: `sync_${Date.now()}`
+                    jobIdDb
                 });
 
                 res.status(202).json({
                     success: true,
                     message: 'Image queued for compression',
-                    jobId: `sync_${Date.now()}`,
+                    jobId: jobIdDb,
                     queueId: job.id
                 });
                 return;
@@ -44,7 +46,12 @@ export const compressImage = async (req: Request, res: Response): Promise<void> 
 
         if (processFormat === 'webp') processor = processor.webp({ quality });
         else if (processFormat === 'jpeg') processor = processor.jpeg({ quality });
-        else if (processFormat === 'png') processor = processor.png({ quality });
+        else if (processFormat === 'png') {
+            // Bug Fix #8: Sharp PNG uses compressionLevel (0-9), not quality.
+            // Map quality 1-100 → compressionLevel 9-0 (higher quality = less compression)
+            const compressionLevel = Math.round((100 - quality) / 100 * 9) as 0|1|2|3|4|5|6|7|8|9;
+            processor = processor.png({ compressionLevel });
+        }
 
         const processedBuffer = await processor.toBuffer();
         const mimeType = processFormat === 'jpeg' ? 'image/jpeg' : `image/${processFormat}`;
@@ -52,11 +59,12 @@ export const compressImage = async (req: Request, res: Response): Promise<void> 
         const originalName = req.file.originalname.replace(/\.[^/.]+$/, '');
         const savings = Math.round((1 - processedBuffer.length / req.file.size) * 100);
 
+        // Bug Fix #1: renamed "resultData" → "result" so frontend can read it
         res.status(200).json({
             success: true,
             message: 'Image compressed successfully',
             jobId: `sync_${Date.now()}`,
-            resultData: {
+            result: {
                 dataUrl,
                 name: `${originalName}.${processFormat}`,
                 format: processFormat,

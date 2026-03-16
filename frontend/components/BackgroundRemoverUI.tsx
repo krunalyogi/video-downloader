@@ -31,19 +31,32 @@ export const BackgroundRemoverUI = () => {
         formData.append("image", file);
 
         try {
-            const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-            const response = await fetch(`${backendUrl}/api/image/remove-bg`, {
-                method: "POST",
-                body: formData,
-            });
+            const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002";
+            // Issue B Fix: prevent indefinite spinner if backend hangs
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 60000);
+            try {
+                const response = await fetch(`${backendUrl}/api/image/remove-bg`, {
+                    method: "POST",
+                    body: formData,
+                    signal: controller.signal,
+                });
+                clearTimeout(timeout);
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (!response.ok || !data.success) {
-                throw new Error(data.error || "Failed to remove background");
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || "Failed to remove background");
+                }
+
+                setResult(data.result);
+            } catch (fetchError: unknown) {
+                clearTimeout(timeout); // Ensure timeout is cleared even if fetch fails
+                if (fetchError instanceof DOMException && fetchError.name === 'AbortError') {
+                    throw new Error("Request timed out after 60 seconds. Please try again.");
+                }
+                throw fetchError; // Re-throw other fetch errors to outer catch
             }
-
-            setResult(data.result);
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "An error occurred");
         } finally {

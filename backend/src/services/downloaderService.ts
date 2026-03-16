@@ -63,7 +63,8 @@ export const handleDownload = async (url: string) => {
             geoBypass: true,
             ageLimit: 99,
             addHeader: [
-                'referer:youtube.com',
+                // Issue H Fix: use correct referer based on domain
+                url.includes('tiktok.com') ? 'referer:tiktok.com' : 'referer:youtube.com',
                 'user-agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
             ]
         };
@@ -137,7 +138,7 @@ export const handleDownload = async (url: string) => {
             console.error(`[Service] yt-dlp error: ${error.message}`);
 
             if (msg.includes('age') || msg.includes('sign in') || msg.includes('login')) {
-                throw new Error('This video is age-restricted and requires authentication. Try a public video.');
+                throw new Error('This video is age-restricted or requires a login. Kliptify can only access publicly available content without a login.');
             }
             if (msg.includes('private') || msg.includes('unavailable') || msg.includes('removed')) {
                 throw new Error('This video is private, deleted, or unavailable.');
