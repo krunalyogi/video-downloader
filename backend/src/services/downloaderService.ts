@@ -51,13 +51,17 @@ export const handleDownload = async (url: string) => {
         }
 
         // ── All other platforms: yt-dlp-exec ─────────────────────────────────
+        if (url.includes('instagram.com/stories/')) {
+            throw new Error('Instagram Stories require user login cookies. Kliptify can currently only download public Reels and Posts.');
+        }
+
         const ytOptions: any = {
             dumpJson: true,
             noWarnings: true,
             preferFreeFormats: true,
-            noCheckCertificates: true,     // bypass SSL issues on some CDNs
-            geoBypass: true,               // bypass geo-restrictions where possible
-            ageLimit: 99,                  // attempt age-restricted content
+            noCheckCertificates: true,
+            geoBypass: true,
+            ageLimit: 99,
             addHeader: [
                 'referer:youtube.com',
                 'user-agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
@@ -72,9 +76,17 @@ export const handleDownload = async (url: string) => {
         const data = await ytDlp(url, ytOptions);
 
         const jsonMeta = data as any;
-        const availableFormats = jsonMeta.formats?.filter((f: any) =>
-            f.url && f.ext !== 'mhtml' && f.protocol !== 'mhtml'
-        ) || [];
+        const availableFormats = jsonMeta.formats?.filter((f: any) => {
+            if (!f.url || f.ext === 'mhtml' || f.protocol === 'mhtml') return false;
+            
+            // Fixes mobile corruption: Prevent downloading video-only DASH formats without audio
+            // Unless it is explicitly an audio-only file, we require both vcodec and acodec.
+            const isVideoOnly = f.vcodec !== 'none' && f.acodec === 'none';
+            if (isVideoOnly && f.ext !== 'gif') {
+                return false;
+            }
+            return true;
+        }) || [];
         availableFormats.sort((a: any, b: any) => (b.height || 0) - (a.height || 0));
 
         const formattedOutputs = availableFormats.map((f: any) => ({

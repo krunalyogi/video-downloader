@@ -15,7 +15,17 @@ export async function POST(request: Request) {
             body: JSON.stringify(body),
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            console.error('API Proxy parsing error. Backend returned:', text.substring(0, 500));
+            return NextResponse.json(
+                { error: 'The backend server failed or timed out. Please try again.' },
+                { status: 502 }
+            );
+        }
 
         return NextResponse.json(data, { status: response.status });
     } catch (error: unknown) {

@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Link as LinkIcon, Loader2, Download, AlertCircle, Clipboard, CheckCircle2 } from "lucide-react";
-import Image from "next/image";
 import { AdSlot } from "@/components/AdSlot";
 
 interface DownloadResult {
@@ -198,12 +197,12 @@ export const DownloaderInput = () => {
                         className="mt-8 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden w-full max-w-3xl flex flex-col md:flex-row"
                     >
                         <div className="w-full md:w-1/3 bg-gray-100 dark:bg-zinc-800 relative min-h-[200px]">
-                            <Image
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
                                 src={result.thumbnail}
                                 alt={result.title}
-                                fill
-                                unoptimized
-                                className="object-cover"
+                                referrerPolicy="no-referrer"
+                                className="object-cover w-full h-full absolute inset-0"
                             />
                         </div>
                         <div className="p-6 flex-1 flex flex-col justify-center">
